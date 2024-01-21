@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return Book</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body style="background-color: #f17193;">
+    <div class="container mt-5">
+        <h2>Return a Book</h2>
+        <form id="returnBookForm">
+            <!-- Display a dropdown menu for selecting a book to return -->
+            <div class="form-group">
+                <label for="book_id_return">Select a Book:</label>
+                <select class="form-control" id="book_id_return" name="book_id_return" required>
+                    <!-- Options will be dynamically populated with book data -->
+                </select>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="returnBook()">Return Book</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and jQuery (required for Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Axios CDN for making API requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        // Check if the user is logged in
+        const accessToken = sessionStorage.getItem('access_token');
+        if (accessToken) {
+            console.log('Access Token:', accessToken);
+            document.getElementById('returnBookForm').style.display = 'block';
+
+            // Fetch the list of all books and populate the dropdown
+            axios.get('http://localhost:5000/all_books', {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+            .then(response => {
+                const books = response.data.books;
+                const bookDropdown = document.getElementById('book_id_return');
+
+                books.forEach(book => {
+                    const option = document.createElement('option');
+                    option.value = book.id;
+                    option.text = book.name;
+                    bookDropdown.add(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching books:', error);
+            });
+        }
+
+        // Function to return a book
+        function returnBook() {
+            const accessToken = sessionStorage.getItem('access_token');
+            if (!accessToken) {
+                alert('Please log in to return a book.');
+                return;
+            }
+
+            // Get the selected book ID from the dropdown
+            const bookId = document.getElementById('book_id_return').value;
+
+            // Log selected book ID for debugging
+            console.log('Selected Book ID:', bookId);
+
+            // Create data object
+            const data = new FormData();
+            data.append('book_id_return', bookId);
+
+            // Make a POST request to return_book endpoint
+            axios.post('http://localhost:5000/return_book', data, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                })
+                .then(response => {
+                    alert(response.data.message);
+                })
+                .catch(error => {
+                    console.error('Error returning book:', error);
+                });
+        }
+    </script>
+</body>
+</html>
