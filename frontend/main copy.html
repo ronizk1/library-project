@@ -39,14 +39,14 @@
 
         /* Pink buttons */
         .btn-pink {
-            background-color: #ff4081;
-            border-color: #ff4081;
+            background-color: #fa3c75;
+            border-color: #fa4679;
         }
 
         /* Pink buttons on hover */
         .btn-pink:hover {
-            background-color: #ff005b;
-            border-color: #ff005b;
+            background-color: #e3a935;
+            border-color: #fc0759;
         }
 
         /* Adjustments for the navbar */
@@ -55,11 +55,14 @@
             padding-bottom: 0;
         }
 
+        .admin-only {
+            display: none;
+        }
+
         .navbar-brand img {
             max-height: 60px; /* Increase the size of the logo */
         }
 
-        /* Center the title under the navbar */
         .title-container {
             text-align: center;
             margin-top: 1rem;
@@ -67,18 +70,33 @@
     </style>
 </head>
 
-<body style="background-color: #efd0f3;">
-    <div class="container mt-5">
-        <!-- Navigation Bar with Logo -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <img src="/frontend/logo.jpg" alt="Library Logo" class="d-inline-block align-top">
-                    
-                </a>
-            </div>
-        </nav>
+<body style="background-color: #f8eaed;">
+    <!-- Navigation Bar with Logo -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/frontend/logo.jpg" alt="Library Logo" class="d-inline-block align-top">
+            </a>
 
+            <!-- Navbar Toggler and Menu -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="register()">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="logout()">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
         <!-- Centered title -->
         <div class="title-container">
             <h2>RONI'S Library</h2>
@@ -92,7 +110,7 @@
         <!-- Action Cards -->
         <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
             <!-- Add Book Card -->
-            <div class="col">
+            <div class="col" id="addBookCard" style="display: none;">
                 <div class="card h-100 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Add a Book</h5>
@@ -103,7 +121,7 @@
             </div>
 
             <!-- Loan Book Card -->
-            <div class="col">
+            <div class="col" id="loanBookCard" style="display: none;">
                 <div class="card h-100 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Loan a Book</h5>
@@ -114,7 +132,7 @@
             </div>
 
             <!-- Return Book Card -->
-            <div class="col">
+            <div class="col" id="returnBookCard" style="display: none;">
                 <div class="card h-100 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Return a Book</h5>
@@ -125,7 +143,7 @@
             </div>
 
             <!-- Display All Loans Card -->
-            <div class="col">
+            <div class="col" id="allLoansCard" style="display: none;">
                 <div class="card h-100 shadow">
                     <div class="card-body">
                         <h5 class="card-title">All Loans</h5>
@@ -136,7 +154,7 @@
             </div>
 
             <!-- Display Late Loans Card -->
-            <div class="col">
+            <div class="col" id="lateLoansCard" style="display: none;">
                 <div class="card h-100 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Late Loans</h5>
@@ -147,7 +165,7 @@
             </div>
 
             <!-- Display All Customers Card -->
-            <div class="col">
+            <div class="col" id="allCustomersCard" style="display: none;">
                 <div class="card h-100 shadow">
                     <div class="card-body">
                         <h5 class="card-title">All Customers</h5>
@@ -158,7 +176,7 @@
             </div>
 
             <!-- Display All Books Card -->
-            <div class="col">
+            <div class="col" id="allBooksCard" style="display: none;">
                 <div class="card h-100 shadow">
                     <div class="card-body">
                         <h5 class="card-title">All Books</h5>
@@ -169,7 +187,7 @@
             </div>
 
             <!-- Find a Book Card -->
-            <div class="col">
+            <div class="col" id="findBookCard" style="display: none;">
                 <div class="card h-100 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Find a Book</h5>
@@ -179,8 +197,21 @@
                 </div>
             </div>
 
+                        <!-- Display users Loans Card -->
+            <div class="col" id="userLoansCard" style="display: none;">
+                <div class="card h-100 shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Your Loans</h5>
+                        <p class="card-text">Click the button to display your loans.</p>
+                        <button class="btn btn-pink" onclick="displayUserLoans()">Display your loans</button>
+                                    <!-- Container to show user loans -->
+                        <div id="userLoansContainer"></div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Find a Customer Card -->
-            <div class="col">
+            <div class="col" id="findCustomerCard" style="display: none;">
                 <div class="card h-100 shadow">
                     <div class="card-body">
                         <h5 class="card-title">Find a Customer</h5>
@@ -190,12 +221,10 @@
                 </div>
             </div>
         </div>
-
-        <!-- Logout Button -->
-        <div class="mt-4 text-center">
-            <button class="btn btn-danger" onclick="logout()">Logout</button>
-        </div>
     </div>
+
+
+
 
     <!-- Bootstrap JS and jQuery (required for Bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -215,77 +244,153 @@
                 }
             })
             .then(response => {
-                const customerName = response.data.username || 'Guest';
-                document.getElementById('welcomeText').textContent = `Welcome, ${customerName}! You are logged in.`;
+                const currentUser = response.data.current_user;
+                const userdata = currentUser.username || 'Guest';
+                console.log('Username:', userdata);
+                
+                document.getElementById('welcomeText').textContent = `Welcome, ${userdata}! You are logged in.`;
                 document.getElementById('welcomeMessage').style.display = 'block';
+                
+                // Check user role and display corresponding action cards
+                const userRole = currentUser && currentUser.role ? currentUser.role : 'guest';
+
+
+                
+                console.log('Response Data:', response.data);
+                
+
+
+
+
+                displayActionCards(userRole);
             })
             .catch(error => {
                 console.error('Error getting user information:', error);
             });
         }
 
+                        // Function to display or hide action cards based on user role
+                // Function to display or hide action cards based on user role
+        // Function to display or hide action cards based on user role
+        function displayActionCards(userRole) {
+            // Log the user role for debugging
+            console.log('User Role:', userRole);
 
-    
+            // Map of action cards and their corresponding roles
+            const actionCardsMap = {
+                'addBookCard': ['admin'],
+                'loanBookCard': ['user'],
+                'returnBookCard': ['user'],
+                'allLoansCard': ['admin'],
+                'lateLoansCard': ['admin'],
+                'allCustomersCard': ['admin'],
+                'allBooksCard': ['user'],
+                'findBookCard': ['user'],
+                'findCustomerCard': ['user'],
+                'userLoansCard': ['user'],
+            };
+
+            // Iterate through the action cards map and display or hide based on user role
+            for (const [cardId, allowedRoles] of Object.entries(actionCardsMap)) {
+                const cardElement = document.getElementById(cardId);
+
+                // Check if the cardElement exists to avoid potential errors
+                if (cardElement) {
+                    // Additional logic to show admin-only elements regardless of the user's role
+                    if (userRole === 'admin') {
+                        cardElement.style.display = 'block';
+                        const adminOnlyElements = cardElement.getElementsByClassName('admin-only');
+                        for (const adminElement of adminOnlyElements) {
+                            adminElement.style.display = 'block';
+                        }
+                    } else {
+                        // Check if the user's role is allowed for the specific action card
+                        if (allowedRoles.includes(userRole)) {
+                            cardElement.style.display = 'block';
+                        } else {
+                            cardElement.style.display = 'none';
+                        }
+                    }
+                }
+            }
+        }
+
+
+
         // Function to add a book
         function addBook() {
             // Navigate to the add_book.html
             window.location.href = 'http://127.0.0.1:5500/frontend/add_book.html';
         }
-    
+
         // Function to loan a book
         function loanBook() {
             // Navigate to the loan_book.html
             window.location.href = 'http://127.0.0.1:5500/frontend/loan_book.html';
         }
 
-        // Function to loan a book
+        // Function to return a book
         function ReturnBook() {
-            // Navigate to the loan_book.html
+            // Navigate to the return_book.html
             window.location.href = 'http://127.0.0.1:5500/frontend/return_book.html';
         }
 
-
-        // Function to loan a book
+        // Function to display all loans
         function allLoans() {
-            // Navigate to the loan_book.html
+            // Navigate to the display_allloans.html
             window.location.href = 'http://127.0.0.1:5500/frontend/display_allloans.html';
         }
-    
-        // Function to loan a book
+
+        // Function to display late loans
         function lateLoans() {
-            // Navigate to the loan_book.html
+            // Navigate to the display_lateloans.html
             window.location.href = 'http://127.0.0.1:5500/frontend/display_lateloans.html';
         }
 
-        // Function to loan a book
+        // Function to display all customers
         function allcustomers() {
-            // Navigate to the loan_book.html
+            // Navigate to the display_allcustomers.html
             window.location.href = 'http://127.0.0.1:5500/frontend/display_allcustomers.html';
         }
 
-        // Function to loan a book
+        // Function to display all books
         function allbooks() {
-            // Navigate to the loan_book.html
+            // Navigate to the display_allbooks.html
             window.location.href = 'http://127.0.0.1:5500/frontend/display_allbooks.html';
         }
 
-        // Function to loan a book
+        // Function to find a book
         function findbook() {
-            // Navigate to the loan_book.html
+            // Navigate to the find_book.html
             window.location.href = 'http://127.0.0.1:5500/frontend/find_book.html';
         }
 
-        // Function to loan a book
+        // Function to find a customer
         function findcust() {
-            // Navigate to the loan_book.html
+            // Navigate to the find_customer.html
             window.location.href = 'http://127.0.0.1:5500/frontend/find_customer.html';
         }
 
-                    // Function to handle logout
+        // Function to find a customer
+        function displayUserLoans() {
+                    // Navigate to the find_customer.html
+            window.location.href = 'http://127.0.0.1:5500/frontend/cust_loans.html';
+        }
+        
+
+
+
+        // Function to register
+        function register() {
+            // Navigate to the register.html
+            window.location.href = 'http://127.0.0.1:5500/frontend/register.html';
+        }
+
+        // Function to handle logout
         function logout() {
-                        // Clear the access token from sessionStorage
+            // Clear the access token from sessionStorage
             sessionStorage.removeItem('access_token');
-                        // Redirect to the login page (adjust the URL as needed)
+            // Redirect to the login page (adjust the URL as needed)
             window.location.href = 'http://127.0.0.1:5500/frontend/index.html';
         }
     </script>

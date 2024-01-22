@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Loans</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-light">
+
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">User Loans</h2>
+    <div id="userLoansContainer" class="card-columns">
+        <!-- User loans will be dynamically added here using JavaScript -->
+    </div>
+</div>
+
+<!-- Bootstrap JS and jQuery (required for Bootstrap) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // Function to display user loans
+    function displayUserLoans() {
+        const accessToken = sessionStorage.getItem('access_token');
+
+        if (accessToken) {
+            axios.get('http://localhost:5000/user_loans', {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+            .then(response => {
+                const userLoans = response.data.user_loans;
+                const userLoansContainer = document.getElementById('userLoansContainer');
+                userLoansContainer.innerHTML = '';
+
+                if (userLoans.length > 0) {
+                    userLoans.forEach(loan => {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+
+                        const cardBody = document.createElement('div');
+                        cardBody.className = 'card-body';
+
+                        const cardTitle = document.createElement('h5');
+                        cardTitle.className = 'card-title';
+                        cardTitle.textContent = loan.book_name;
+
+                        const loanInfo = document.createElement('p');
+                        loanInfo.className = 'card-text';
+                        loanInfo.textContent = `Loan Date: ${loan.loan_date}, Return Date: ${loan.return_date}`;
+
+                        cardBody.appendChild(cardTitle);
+                        cardBody.appendChild(loanInfo);
+                        card.appendChild(cardBody);
+                        userLoansContainer.appendChild(card);
+                    });
+                } else {
+                    const noLoansMessage = document.createElement('p');
+                    noLoansMessage.className = 'text-muted';
+                    noLoansMessage.textContent = 'No loans found for the current user.';
+                    userLoansContainer.appendChild(noLoansMessage);
+                }
+            })
+            .catch(error => {
+                console.error('Error getting user loans:', error);
+            });
+        }
+    }
+
+    // Call the function when the page loads
+    window.onload = displayUserLoans;
+</script>
+
+</body>
+</html>

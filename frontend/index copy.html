@@ -9,13 +9,40 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #ef0d7e;
+        }
+
+        .container {
+            max-width: 650px;
+            margin-top: 200px;
+        }
+
+        .form-container {
+            background-color: #f9adca;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-login {
+            background-color: #f9adca;
+            border-color: #0c0e10;
+        }
+
+        .btn-login:hover {
+            background-color: #171a1a;
+            border-color: #151618;
+        }
+    </style>
 </head>
 
-<body>
-    <div class="container mt-5">
+<body style="background-color: #f17193;">
+    <div class="container">
         <!-- Login Form -->
-        <div id="loginForm" style="display: block;">
-            <h3>Login</h3>
+        <div id="loginForm" class="form-container">
+            <h3 class="text-center mb-4">Login</h3>
             <form>
                 <div class="form-group">
                     <label for="username">Username:</label>
@@ -25,25 +52,9 @@
                     <label for="password">Password:</label>
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
-                <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+                <button type="button" class="btn btn-primary btn-login btn-block" onclick="login()">Login</button>
             </form>
-            <p class="mt-3">Don't have an account? <a href="http://127.0.0.1:5500/frontend/register.html" class="btn btn-outline-primary">Register</a></p>
-        </div>
-
-        <!-- Register Form -->
-        <div id="registerForm" style="display: none;">
-            <h3>Register</h3>
-            <form>
-                <!-- Include your register.html content here -->
-            </form>
-        </div>
-
-        <!-- Add Book Form -->
-        <div id="addBookForm" style="display: none;">
-            <h3>Add Book</h3>
-            <form>
-                <!-- Include your add_book.html content here -->
-            </form>
+            <p class="mt-3 text-center">Don't have an account? <a href="http://127.0.0.1:5500/frontend/register.html" class="btn btn-outline-primary">Register</a></p>
         </div>
     </div>
 
@@ -59,18 +70,18 @@
         const login = async () => {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-    
+
             try {
                 const response = await axios.post('http://127.0.0.1:5000/login', {
                     username,
                     password
                 });
-    
+
                 console.log(response.data);
-    
+
                 // Assuming you want to store the access token in sessionStorage
                 sessionStorage.setItem('access_token', response.data.access_token);
-    
+
                 // Redirect to the main page after successful login
                 window.location.href = 'main.html';
             } catch (error) {

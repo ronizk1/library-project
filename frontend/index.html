@@ -70,18 +70,18 @@
         const login = async () => {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-    
+
             try {
                 const response = await axios.post('http://127.0.0.1:5000/login', {
                     username,
                     password
                 });
-    
+
                 console.log(response.data);
-    
+
                 // Assuming you want to store the access token in sessionStorage
                 sessionStorage.setItem('access_token', response.data.access_token);
-    
+
                 // Redirect to the main page after successful login
                 window.location.href = 'main.html';
             } catch (error) {

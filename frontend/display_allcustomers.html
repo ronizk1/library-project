@@ -6,10 +6,15 @@
     <title>Customers List</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #efccd6;
+        }
+    </style>
 </head>
-<body style="background-color:#efccd6;">
+<body>
     <div class="container mt-5">
-        <h2>Customers List</h2>
+        <h2 class="text-center mb-4">Customers List</h2>
         <ul id="customersList" class="list-group">
             <!-- Customers will be dynamically added here using JavaScript -->
         </ul>
@@ -17,7 +22,7 @@
 
     <!-- Loan Book Form -->
     <form id="customersForm" style="display: none;">
-                <!-- Your loan book form elements go here -->
+        <!-- Your loan book form elements go here -->
     </form>
 
     <!-- Bootstrap JS and jQuery (required for Bootstrap) -->
@@ -29,12 +34,10 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
-
         // Check if the user is logged in
         const accessToken = sessionStorage.getItem('access_token');
         console.log('Access Token:', accessToken);
         if (accessToken) {
-            
             document.getElementById('customersForm').style.display = 'block';
             getCustomers(); // Fetch and display loans if the user is logged in
         }
@@ -53,16 +56,20 @@
                         'Authorization': `Bearer ${accessToken}`
                     }
                 })
-
-           
                 .then(response => {
                     const customersList = document.getElementById('customersList');
                     customersList.innerHTML = '';
 
                     response.data.customers.forEach(customer => {
                         const listItem = document.createElement('li');
-                        listItem.className = 'list-group-item';
-                        listItem.textContent = `${customer.name}, ${customer.city}, ${customer.age} years old`;
+                        listItem.className = 'list-group-item list-group-item-action';
+                        listItem.innerHTML = `
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">${customer.name}</h5>
+                                <small>${customer.age} years old</small>
+                            </div>
+                            <p class="mb-1">${customer.city}</p>
+                        `;
                         customersList.appendChild(listItem);
                     });
                 })

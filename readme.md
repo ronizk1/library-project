@@ -1,204 +1,88 @@
-# Library Management System
+# Flask Library Management System
 
-Welcome to the Library Management System! This Flask application allows users to manage a library, including registering users, adding books, loaning and returning books, and more.
-
-## Table of Contents
-
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-  - [Register](#register)
-  - [Login](#login)
-  - [Add Book](#add-book)
-  - [Loan Book](#loan-book)
-  - [Return Book](#return-book)
-  - [Protected Routes](#protected-routes)
-- [API Endpoints](#api-endpoints)
-- [Database Models](#database-models)
-- [Late Loans](#late-loans)
-- [All Loans](#all-loans)
-- [All Books](#all-books)
-- [All Customers](#all-Customers)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Getting Started
-
-### Prerequisites
-
-- Python 3.x
-- Flask
-- Other dependencies (specified in `requirements.txt`)
-
-### Installation
-
-1. Clone the repository:
-
-    ```bash
-    git clone https://github.com/your-username/library-management-system.git
-    ```
-
-2. Navigate to the project directory:
-
-    ```bash
-    cd library-management-system
-    ```
-
-3. Install dependencies:
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4. Set up the database:
-
-    ```bash
-    python app.py
-    ```
-
-## Usage
-
-### Register
-
-To register a new user, make a POST request to `/register` with the user details:
-
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{"username":"example", "password":"password", "name":"John Doe", "city":"City", "age":25}' http://localhost:5000/register
-
-
-
-Certainly! Here's a comprehensive README.md file for your Flask project:
-
-markdown
-Copy code
-# Library Management System
-
-Welcome to the Library Management System! This Flask application allows users to manage a library, including registering users, adding books, loaning and returning books, and more.
+This is a simple Library Management System built using Flask, SQLAlchemy, Flask-JWT-Extended, and Bootstrap. The system allows users to register, log in, borrow and return books, and provides administrative functionality.
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+- [Features](#features)
+- [Installation](#installation)
 - [Usage](#usage)
-  - [Register](#register)
-  - [Login](#login)
-  - [Add Book](#add-book)
-  - [Loan Book](#loan-book)
-  - [Return Book](#return-book)
-  - [Protected Routes](#protected-routes)
 - [API Endpoints](#api-endpoints)
-- [Database Models](#database-models)
-- [Late Loans](#late-loans)
-- [Contributing](#contributing)
-- [License](#license)
 
-## Getting Started
+## Features
 
-### Prerequisites
+- **User Registration**: Users can register with the system, providing necessary information such as username, password, name, city, age, and role (with default role as 'user').
+- **User Authentication**: Secure user authentication using JWT tokens. Passwords are hashed and salted for security.
+- **Book Operations**: Users and admins can perform various operations on books, including adding, viewing, and searching for books.
+- **Borrow and Return**: Users can borrow and return books. Due date tracking is implemented to manage book returns.
+- **Admin Functionality**: Admins have additional privileges, including adding books and viewing all loans. Admins are identified by their 'admin' role.
 
-- Python 3.x
-- Flask
-- Other dependencies (specified in `requirements.txt`)
 
-### Installation
+## Usage
+Usage
+- Register a User:
+
+Use the /register endpoint to register a new user by providing necessary details.
+- Log In:
+
+Use the /login endpoint to log in with your credentials and receive a JWT token.
+Book Operations:
+
+Use /add_book to add new books (admin only).
+Use /all_books to get a list of all available books.
+- Borrow and Return:
+
+Use /loan_book to borrow a book.
+Use /return_book to return a borrowed book.
+- Admin Actions:
+
+Admins can use /loans to view all loans.
+Admins can use /late_loans to view late loans.
+Admins can use /customers to view all customers.
+Admins can use /books to view all books.
+- Search Functionality:
+
+Use /find_book to find a book by name.
+Use /find_customer to find a customer by name.
+- User-Specific Actions:
+
+Users can use /user_loans to view all loans for the current user.
+- Protected Route:
+
+Access the protected route /protected to get information about the current user (requires authentication).
+- Find by ID:
+
+Use /find_book_by_id/{book_id} to find a book by its ID.
+Use /find_customer_by_id/{customer_id} to find a customer by their ID.
+
+
+## API Endpoints
+
+- POST /register: Register a new user. Requires providing username, password, name, city, age, and an optional role (default is 'user').
+- POST /login: Log in with existing credentials. Returns a JWT token for authentication.
+- POST /add_book: Add a new book (admin only). Requires providing name, author, year_published, and book_type.
+- POST /loan_book: Loan a book. Requires providing the book_id.
+- GET /all_books: Get all available books.
+- GET /loans: View all loans (admin only).
+- POST /return_book: Return a book. Requires providing the book_id_return.
+- GET /late_loans: View late loans (admin only).
+- GET /customers: View all customers (admin only).
+- GET /books: View all books.
+- POST /find_book: Find a book by name. Requires providing the book_name.
+- POST /find_customer: Find a customer by name. Requires providing the customer_name.
+- GET /user_loans: Get all loans for the current user.
+
+## Role System
+- Users are assigned roles ('user' by default).
+- Admins have additional privileges, including adding books and viewing all loans.
+- Role-based access control is implemented to restrict certain operations to admins only.
+
+## Installation
 
 1. Clone the repository:
 
-    ```bash
-    git clone https://github.com/your-username/library-management-system.git
-    ```
-
-2. Navigate to the project directory:
-
-    ```bash
-    cd library-management-system
-    ```
-
-3. Install dependencies:
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4. Set up the database:
-
-    ```bash
-    python app.py
-    ```
-
-## Usage
-
-### Register
-
-To register a new user, make a POST request to `/register` with the user details:
-
 ```bash
-curl -X POST -H "Content-Type: application/json" -d '{"username":"example", "password":"password", "name":"John Doe", "city":"City", "age":25}' http://localhost:5000/register
-Login
-To log in and obtain an access token, make a POST request to /login with the user credentials:
+git clone https://github.com/your-username/flask-library-management.git
+cd flask-library-management
 
-bash
-Copy code
-curl -X POST -H "Content-Type: application/json" -d '{"username":"example", "password":"password"}' http://localhost:5000/login
-Add Book
-To add a new book, make a POST request to /add_book with the book details:
 
-bash
-Copy code
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer YOUR_ACCESS_TOKEN" -d '{"name":"Book Name", "author":"Author", "year_published":2022, "book_type":1}' http://localhost:5000/add_book
-Loan Book
-To loan a book, make a POST request to /loan_book with the book ID:
-
-bash
-Copy code
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer YOUR_ACCESS_TOKEN" -d '{"book_id":1}' http://localhost:5000/loan_book
-Return Book
-To return a book, make a POST request to /return_book with the book ID:
-
-bash
-Copy code
-curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer YOUR_ACCESS_TOKEN" -d '{"book_id_return":1}' http://localhost:5000/return_book
-Protected Routes
-To access protected routes, include the access token in the request to /protected:
-
-bash
-Copy code
-curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" http://localhost:5000/protected
-API Endpoints
-/register - Register a new user.
-/login - Log in a user and obtain an access token.
-/add_book - Add a new book to the system.
-/loan_book - Loan a book.
-/return_book - Return a book.
-/protected - Protected route, requires a valid access token.
-/all_books - Get information about all books.
-/loans - Get information about loans.
-/late_loans - Get information about late loans.
-/customers - Get information about all customers.
-/books - Get information about all books.
-/find_book - Find information about a specific book.
-/find_customer - Find information about a specific customer.
-
-Database Models
-Customer
-id (Integer, Primary Key)
-name (String, Not Null)
-city (String, Not Null)
-age (Integer, Not Null)
-username (String, Unique, Not Null)
-password (String, Not Null)
-loans (Relationship with Loan)
-Book
-id (Integer, Primary Key)
-name (String, Not Null)
-author (String, Not Null)
-year_published (Integer, Not Null)
-book_type (Integer, Not Null)
-loans (Relationship with Loan)
-Loan
-cust_id (Integer, Foreign Key, Primary Key)
-book_id (Integer, Foreign Key, Primary Key)
-loan_date (DateTime, Not Null, Default: Current UTC Time)
-return_date (DateTime, Nullable)
