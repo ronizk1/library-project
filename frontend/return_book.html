@@ -38,7 +38,7 @@
             document.getElementById('returnBookForm').style.display = 'block';
 
             // Fetch the list of all books and populate the dropdown
-            axios.get('http://localhost:5000/all_books', {
+            axios.get('https://library-back-nlct.onrender.com/all_books', {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
@@ -78,7 +78,7 @@
             data.append('book_id_return', bookId);
 
             // Make a POST request to return_book endpoint
-            axios.post('http://localhost:5000/return_book', data, {
+            axios.post('https://library-back-nlct.onrender.com/return_book', data, {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
                     }

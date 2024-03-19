@@ -28,7 +28,7 @@
         const accessToken = sessionStorage.getItem('access_token');
 
         if (accessToken) {
-            axios.get('http://localhost:5000/user_loans', {
+            axios.get('https://library-back-nlct.onrender.com/user_loans', {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
